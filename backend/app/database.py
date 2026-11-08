@@ -18,8 +18,8 @@ connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite")
 engine = create_engine(DATABASE_URL, connect_args=connect_args)
 
 
-# Enforce foreign key constraints in SQLite
-@event.listens_for(Engine, "connect")
+# Enforce foreign key constraints in SQLite for application engine
+@event.listens_for(engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
     if DATABASE_URL.startswith("sqlite"):
         cursor = dbapi_connection.cursor()
