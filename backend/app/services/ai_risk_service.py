@@ -79,9 +79,21 @@ def evaluate_student_risk(
     # Determine Risk Level including Resurfacing & Unsure states
     if student.status == "WITHDRAWN":
         risk_level = "WITHDRAWN"
+    elif total_score < 45:
+        # Full Recovery: student healed back to healthy LOW risk
+        if student.ai_dismissed:
+            student.ai_dismissed = False
+            student.ai_dismissed_at_score = None
+            student.ai_dismiss_reason = None
+            student.ai_dismiss_notes = None
+            session.add(student)
+            session.commit()
+            session.refresh(student)
+        risk_level = "LOW"
     elif student.ai_dismissed:
         baseline = student.ai_dismissed_at_score or 0
-        if total_score >= baseline + 15:
+        threshold = min(baseline + 15, 95)
+        if total_score >= threshold:
             risk_level = "RESURFACED_HIGH_RISK"
         else:
             risk_level = "DISMISSED_FALSE_FLAG"
@@ -221,12 +233,12 @@ def sync_all_counsellor_tasks(session: Session, as_of: date = REFERENCE_DATE) ->
                 existing_task.confidence = result["confidence"]
                 existing_task.updated_at = now_ts
                 session.add(existing_task)
-        elif existing_task is not None and existing_task.status == "OPEN" and level == "LOW":
-            # Score dropped below threshold (e.g., after parent paid overdue instalment)
+        elif existing_task is not None and existing_task.status in ("OPEN", "DISMISSED_FALSE_FLAG") and level == "LOW":
+            # Score dropped below threshold (student recovered or cleared dues)
             existing_task.status = "COMPLETED"
             existing_task.risk_score = result["risk_score"]
             existing_task.risk_level = "LOW"
-            existing_task.counsellor_notes = "Auto-resolved after risk score dropped below 45"
+            existing_task.counsellor_notes = (existing_task.counsellor_notes or "") + " [Auto-resolved: student recovered to LOW risk (<45)]"
             existing_task.updated_at = now_ts
             session.add(existing_task)
 

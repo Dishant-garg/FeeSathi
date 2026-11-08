@@ -171,3 +171,101 @@ def test_false_flag_dismissal_and_resurfacing():
         session.refresh(task)
         assert task.status == "OPEN"
         assert task.risk_level == "RESURFACED_HIGH_RISK"
+
+
+def test_high_score_resurfacing_at_95_cap():
+    with get_test_session() as session:
+        # Student with severe baseline score of 90 (e.g. dismissed at 90)
+        student = Student(
+            id="STU-HIGH",
+            name="Severe Risk Student",
+            centre="Mansarovar",
+            batch="JEE 2027",
+            parent_phone="9829000099",
+            course_start_date=date(2026, 4, 1),
+            course_end_date=date(2027, 1, 25),
+            attendance_pct=30.0,
+            test_scores_json=json.dumps([90.0, 70.0, 50.0]),
+            status="ACTIVE",
+            ai_dismissed=True,
+            ai_dismissed_at_score=90,  # Baseline 90! 90 + 15 = 105 (impossible without cap)
+        )
+        session.add(student)
+
+        # 40 days overdue with full balance unpaid (fee_pts = 40.0)
+        inst = Instalment(
+            id=20,
+            student_id="STU-HIGH",
+            instalment_no=1,
+            due_date=date(2026, 9, 1),
+            amount_due=30000,
+            amount_paid=0,
+            status="OVERDUE",
+        )
+        session.add(inst)
+        session.commit()
+
+        # Score is 40 (fee) + 35 (att) + 25 (test) = 100!
+        res = evaluate_student_risk(session, student, as_of=date(2026, 11, 2))
+        assert res["risk_score"] >= 95
+        # Under 95 cap, this resurfaces even though 90+15=105 is unreachable
+        assert res["risk_level"] == "RESURFACED_HIGH_RISK"
+
+
+def test_recovery_to_low_risk_resets_dismissal():
+    with get_test_session() as session:
+        # Student previously dismissed at score 74
+        student = Student(
+            id="STU-RECOV",
+            name="Recovering Student",
+            centre="Vaishali Nagar",
+            batch="JEE 2027",
+            parent_phone="9829000077",
+            course_start_date=date(2026, 4, 1),
+            course_end_date=date(2027, 1, 25),
+            attendance_pct=92.0,  # Healed attendance!
+            test_scores_json=json.dumps([85.0, 88.0, 90.0]),  # Climbing tests!
+            status="ACTIVE",
+            ai_dismissed=True,
+            ai_dismissed_at_score=74,
+            ai_dismiss_reason="MEDICAL_LEAVE",
+        )
+        session.add(student)
+
+        # Fully paid instalment (fee_pts = 0)
+        inst = Instalment(
+            id=30,
+            student_id="STU-RECOV",
+            instalment_no=1,
+            due_date=date(2026, 10, 10),
+            amount_due=30000,
+            amount_paid=30000,
+            status="PAID",
+        )
+        session.add(inst)
+        session.commit()
+
+        # 1. Evaluate healed student -> score is 0 (< 45 LOW)
+        res = evaluate_student_risk(session, student, as_of=date(2026, 11, 2))
+        assert res["risk_score"] < 45
+        assert res["risk_level"] == "LOW"
+
+        # ai_dismissed must be reset to False!
+        session.refresh(student)
+        assert student.ai_dismissed is False
+        assert student.ai_dismissed_at_score is None
+
+        # 2. Months later, student defaults again (drops to 66% att and 23d overdue)
+        student.attendance_pct = 66.0
+        student.test_scores_json = json.dumps([72.0, 63.0, 54.0])
+        inst.amount_paid = 15000
+        inst.status = "PART_PAID_OVERDUE"
+        session.add(student)
+        session.add(inst)
+        session.commit()
+
+        # Score is back at 74 -> Should cleanly alert as fresh HIGH risk!
+        res_fresh = evaluate_student_risk(session, student, as_of=date(2026, 11, 2))
+        assert res_fresh["risk_score"] == 74
+        assert res_fresh["risk_level"] == "HIGH"  # Not blocked by old dengue dismissal!
+
