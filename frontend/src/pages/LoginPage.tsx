@@ -66,54 +66,78 @@ export const LoginPage: React.FC = () => {
           <div className="font-medium text-slate-600 mb-2">
             Select Registered Demo Phone:
           </div>
-          <div className="grid grid-cols-2 gap-1.5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
             <button
               type="button"
               onClick={() => setPhone("9829010587")}
-              className={`text-left px-2.5 py-1.5 rounded border ${
+              className={`text-left px-2.5 py-1.5 rounded-lg border transition ${
                 phone === "9829010587"
-                  ? "bg-slate-900 text-white border-slate-900"
-                  : "bg-white text-slate-700 border-slate-200"
+                  ? "bg-slate-900 text-white border-slate-900 shadow-sm"
+                  : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
               }`}
             >
-              <div className="font-semibold">9829010587</div>
-              <div className="text-[11px] opacity-80">Ishita (23d Overdue)</div>
+              <div className="font-semibold font-mono text-xs">9829010587</div>
+              <div className="text-[10px] opacity-80">Ishita (23d Overdue)</div>
             </button>
             <button
               type="button"
               onClick={() => setPhone("9829010219")}
-              className={`text-left px-2.5 py-1.5 rounded border ${
+              className={`text-left px-2.5 py-1.5 rounded-lg border transition ${
                 phone === "9829010219"
-                  ? "bg-slate-900 text-white border-slate-900"
-                  : "bg-white text-slate-700 border-slate-200"
+                  ? "bg-slate-900 text-white border-slate-900 shadow-sm"
+                  : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
               }`}
             >
-              <div className="font-semibold">9829010219</div>
-              <div className="text-[11px] opacity-80">Mohit (Due in 13d)</div>
+              <div className="font-semibold font-mono text-xs">9829010219</div>
+              <div className="text-[10px] opacity-80">Mohit (Due in 13d)</div>
             </button>
             <button
               type="button"
               onClick={() => setPhone("9829010412")}
-              className={`text-left px-2.5 py-1.5 rounded border ${
+              className={`text-left px-2.5 py-1.5 rounded-lg border transition ${
                 phone === "9829010412"
-                  ? "bg-slate-900 text-white border-slate-900"
-                  : "bg-white text-slate-700 border-slate-200"
+                  ? "bg-slate-900 text-white border-slate-900 shadow-sm"
+                  : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
               }`}
             >
-              <div className="font-semibold">9829010412</div>
-              <div className="text-[11px] opacity-80">Aarav (All Paid)</div>
+              <div className="font-semibold font-mono text-xs">9829010412</div>
+              <div className="text-[10px] opacity-80">Aarav (All Paid)</div>
+            </button>
+            <button
+              type="button"
+              onClick={() => setPhone("9829010641")}
+              className={`text-left px-2.5 py-1.5 rounded-lg border transition ${
+                phone === "9829010641"
+                  ? "bg-slate-900 text-white border-slate-900 shadow-sm"
+                  : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
+              }`}
+            >
+              <div className="font-semibold font-mono text-xs">9829010641</div>
+              <div className="text-[10px] opacity-80">Devansh (79d Late)</div>
             </button>
             <button
               type="button"
               onClick={() => setPhone("9829000001")}
-              className={`text-left px-2.5 py-1.5 rounded border ${
+              className={`text-left px-2.5 py-1.5 rounded-lg border transition ${
                 phone === "9829000001"
-                  ? "bg-slate-900 text-white border-slate-900"
-                  : "bg-white text-slate-700 border-slate-200"
+                  ? "bg-slate-900 text-white border-slate-900 shadow-sm"
+                  : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
               }`}
             >
-              <div className="font-semibold">9829000001</div>
-              <div className="text-[11px] opacity-80">Accounts Staff</div>
+              <div className="font-semibold font-mono text-xs">9829000001</div>
+              <div className="text-[10px] opacity-80">Accounts Staff</div>
+            </button>
+            <button
+              type="button"
+              onClick={() => setPhone("9829000002")}
+              className={`text-left px-2.5 py-1.5 rounded-lg border transition ${
+                phone === "9829000002"
+                  ? "bg-slate-900 text-white border-slate-900 shadow-sm"
+                  : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
+              }`}
+            >
+              <div className="font-semibold font-mono text-xs">9829000002</div>
+              <div className="text-[10px] opacity-80">Counsellor (AI)</div>
             </button>
           </div>
         </div>
