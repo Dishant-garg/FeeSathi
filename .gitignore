@@ -67,3 +67,6 @@ pnpm-debug.log*
 *.sublime-workspace
 *.swp
 *.swo
+
+*.docx
+submission.zip
