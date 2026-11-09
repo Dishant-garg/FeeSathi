@@ -1,7 +1,7 @@
 # Technical Design Document (TDD)
 # FeeSathi — Enterprise Fee Intelligence, MoE 2024 Refund Engine & Parent Portal
 
-> **GitHub Repository:** `https://github.com/dishantgarg/FeeSathi`
+> **GitHub Repository:** `https://github.com/Dishant-garg/FeeSathi`
 > **Live Application Demo:** `http://localhost:5173` 
 > **Client:** Company A, Jaipur (Engineering & Medical Entrance Coaching — JEE / NEET)  
 > **Target Scope:** 4 Centres, 2,600 Students, 140 Staff, ₹31.2 Crore Annual Billing  
