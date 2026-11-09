@@ -14,6 +14,7 @@ import {
   TrendingUp,
   MessageSquare,
   Sparkles,
+  LogOut,
 } from "lucide-react";
 import {
   apiFetch,
@@ -34,7 +35,7 @@ interface ParentPortalPageProps {
 export const ParentPortalPage: React.FC<ParentPortalPageProps> = ({
   refreshSignal,
 }) => {
-  const { lang, setLang } = useAuth();
+  const { lang, setLang, logout, user } = useAuth();
   const t = tDict[lang];
 
   const [data, setData] = useState<ParentPortalPayload | null>(null);
@@ -156,6 +157,15 @@ export const ParentPortalPage: React.FC<ParentPortalPageProps> = ({
             >
               <Globe className="w-3.5 h-3.5 text-indigo-600" />
               <span>{lang === "en" ? "हिंदी संस्करण" : "English View"}</span>
+            </button>
+
+            <button
+              onClick={logout}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold border border-slate-200 bg-slate-50 hover:bg-rose-50 hover:border-rose-200 text-slate-700 hover:text-rose-700 transition active:scale-95"
+              title="Sign out of Parent Portal"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Sign Out</span>
             </button>
           </div>
         </header>

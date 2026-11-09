@@ -8,6 +8,7 @@ import {
   HeartHandshake,
   Landmark,
   ShieldCheck,
+  LogOut,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { DashboardTab } from "../components/accounts/DashboardTab";
@@ -29,7 +30,7 @@ type WorkspaceTab =
 export const AccountsWorkspace: React.FC<AccountsWorkspaceProps> = ({
   refreshSignal,
 }) => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const isCounsellor = user?.role === "COUNSELLOR";
 
   const [activeTab, setActiveTab] = useState<WorkspaceTab>(
@@ -172,6 +173,16 @@ export const AccountsWorkspace: React.FC<AccountsWorkspaceProps> = ({
               </button>
             );
           })}
+
+          <button
+            type="button"
+            onClick={logout}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-500 hover:text-rose-700 hover:bg-rose-50 transition border border-transparent hover:border-rose-200"
+            title="Sign out of Staff Portal"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Sign Out</span>
+          </button>
         </nav>
       </div>
 
