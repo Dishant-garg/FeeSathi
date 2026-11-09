@@ -177,6 +177,15 @@ def seed_database(session: Session, force_reset: bool = False) -> None:
             dpdp_consent_timestamp=datetime(2026, 4, 2, 9, 15, tzinfo=timezone.utc),
         ),
         User(
+            phone="9829010641",
+            name="Sanjay Rathore (Devansh's Parent)",
+            role="PARENT",
+            student_id="STU-0641",
+            preferred_lang="hi",
+            dpdp_consent_given=True,
+            dpdp_consent_timestamp=datetime(2026, 4, 2, 10, 0, tzinfo=timezone.utc),
+        ),
+        User(
             phone="9829000001",
             name="Vikram Khandelwal (Accounts Executive)",
             role="ACCOUNTS",

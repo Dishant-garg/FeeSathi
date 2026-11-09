@@ -33,6 +33,14 @@ const DEMO_PERSONAS = [
     accent: "text-emerald-400 border-emerald-500/30",
   },
   {
+    initials: "DR",
+    name: "Devansh",
+    detail: "79d Overdue (>60d)",
+    phone: "9829010641",
+    type: "mobile",
+    accent: "text-red-400 border-red-500/30",
+  },
+  {
     initials: "AC",
     name: "Accounts Exec",
     detail: "All 4 Centres",
